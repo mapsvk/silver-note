@@ -1,1 +1,4 @@
 # notes
+## Configure network setting
+
+
