@@ -9,3 +9,9 @@ New-NetIPAddress -InterfaceAlias Ethernet0 –IPAddress 192.168.0.100 -DefaultGa
 ```
 Get-NetIPConfiguration
 ```
+
+
+
+Set-NetConnectionProfile
+
+Set-NetConnectionProfile -Name Network -NetworkCategory Private
