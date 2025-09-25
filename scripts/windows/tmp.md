@@ -9,3 +9,7 @@ New-NetIPAddress -InterfaceAlias Ethernet0 –IPAddress 192.168.0.100 -DefaultGa
 ```
 Get-NetIPConfiguration
 ```
+
+```
+ Set-DnsClientServerAddress -InterfaceAlias Ethernet0 -ServerAddresses 127.0.0.1
+```
