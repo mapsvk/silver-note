@@ -1,3 +1,7 @@
-#
+#docker run with different parameters
 
-docker run -d ubuntu
+echo 'TESTTT!!!'
+
+docker-compose up --remove-orphans -d
+
+docker-compose logs

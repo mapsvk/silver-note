@@ -1,3 +1,8 @@
 services:
   ubuntu_test:
     image: ubuntu
+    user: root
+    volumes: 
+      - ./data/opt:/opt/
+      - ./data/entrypoint.sh:/entrypoint.sh:ro
+    entrypoint: ["/entrypoint.sh"]
