@@ -1,3 +1,4 @@
 #cloud-init
-
-echo 'TEST!!'
+package_update: true
+packages:
+  - nano
