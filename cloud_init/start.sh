@@ -1,7 +1,8 @@
+#!/bin/bash
 #docker run with different parameters
 
 echo 'TESTTT!!!'
 
-docker-compose up --remove-orphans -d
+docker-compose -f ./compose.yml up -d --remove-orphans --force-recreate #--rm
 
-docker-compose logs
+docker-compose -f ./compose.yml logs

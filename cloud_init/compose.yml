@@ -3,6 +3,6 @@ services:
     image: ubuntu
     user: root
     volumes: 
-      - ./data/opt:/opt/
+      - ./data/opt:/opt/:rw
       - ./data/entrypoint.sh:/entrypoint.sh:ro
     entrypoint: ["/entrypoint.sh"]
