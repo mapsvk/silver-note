@@ -12,3 +12,13 @@ packages:
 #     ssh_authorized_keys:
 #       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINxT15yJYj1cWElTZjjz7iKdPx7y2G8RCCN/SAG8R7nv uname
 
+
+# ansible:
+#   install_method: pip
+#   pull:
+#     - url: "https://github.com/holmanb/vmboot.git"
+#       playbook_names: [ubuntu.yml]
+
+
+
+
