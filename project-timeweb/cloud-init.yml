@@ -16,6 +16,7 @@ packages:
   - wireguard
   - git
   - curl
+  - apt-transport-https
   - ca-certificates
   - gnupg
   - qrencode
@@ -157,7 +158,8 @@ write_files:
 runcmd:
   - sysctl --system
 
-  # WireGuard: Генерируем ключи и конфигурационный файл wg0.conf
+  # WireGuard
+  ## Генерируем ключи и конфигурационный файл wg0.conf
   - cd /etc/wireguard/
   - wg genkey | tee server_privatekey | wg pubkey > server_publickey
   - |
@@ -172,17 +174,50 @@ runcmd:
     PostDown = iptables -D FORWARD -i wg0 -o eth0 -j ACCEPT; iptables -D FORWARD -i wg0 -o wg0 -j REJECT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
     EOF
 
-  # Включаем и запускаем WireGuard
+  ## Включаем и запускаем WireGuard
   - systemctl enable wg-quick@wg0
   - systemctl start wg-quick@wg0
 
-  # Включаем и запускаем Fail2ban
+  ## Включаем и запускаем Fail2ban
   - systemctl enable fail2ban
   - systemctl start fail2ban
 
-  # Включаем Firewall (UFW) и жестко закрываем порты
+  ## Включаем Firewall (UFW) и жестко закрываем порты
   - ufw default deny incoming
   - ufw default allow outgoing
   - ufw allow 22/tcp comment 'SSH Port'
   - ufw allow 51820/udp comment 'WireGuard VPN Port'
   - ufw --force enable
+
+  # Устновка Docker
+  ## Создание директории для GPG-ключа
+  - install -m 0755 -d /etc/apt/keyrings
+  
+  ## Скачивание официального GPG-ключа Docker
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - chmod a+r /etc/apt/keyrings/docker.asc
+
+
+  ## Добавление официального репозитория Docker в источники APT
+  - sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+    Types: deb
+    URIs: https://download.docker.com/linux/ubuntu
+    Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+    Components: stable
+    Architectures: $(dpkg --print-architecture)
+    Signed-By: /etc/apt/keyrings/docker.asc
+    EOF
+
+  ## Обновление кэша пакетов после добавления нового репозитория
+  - apt-get update -y
+
+  ## Установка Docker Engine, CLI и Docker Compose
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  
+  ## Включение автозапуска и запуск службы Docker
+  - systemctl enable docker
+  - systemctl start docker
+  
+  ## Настройка прав (опционально): добавление стандартного пользователя в группу docker
+  ## Замените 'ubuntu', если ваш провайдер использует другое имя пользователя по умолчанию (например, 'debian' или 'root')
+  - usermod -aG docker ubuntu
