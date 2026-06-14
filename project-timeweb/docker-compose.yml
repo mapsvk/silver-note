@@ -1,0 +1,20 @@
+services:
+  socks5:
+    image: ghcr.io/tarampampam/3proxy:2
+    container_name: socks5
+    restart: always
+    ports:
+      - "1080:1080/tcp"
+    volumes:
+      - /opt/3proxy/config:/etc/3proxy:ro
+      - /opt/3proxy/logs:/var/log/3proxy
+    networks:
+      - socks5_network
+    ulimits:
+      nofile:
+        soft: 20000
+        hard: 20000
+
+networks:
+  socks5_network:
+    driver: bridge
