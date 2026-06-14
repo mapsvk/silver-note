@@ -44,7 +44,7 @@ write_files:
       logpath = %(sshd_log)s
       backend = %(sshd_backend)s
   
-  - path: /usr/localbin/add-wg-user
+  - path: /usr/local/bin/add-wg-user
     owner: root:root
     permissions: '0755'
     content: |
