@@ -103,16 +103,16 @@ write_files:
       cat <<EOF >> /etc/wireguard/wg0.conf
 
       [Peer]
-      # Name = $USERNAME
+      # Name = "$USERNAME"
       PublicKey = $PUB_KEY
       AllowedIPs = $CLIENT_IP/32
       EOF
 
       echo "======================================================"
-      echo "Пользователь $USERNAME" успешно добавлен!"
+      echo "Пользователь $USERNAME успешно добавлен!"
       echo "Конфиг сохранен в: $CDIR/USERNAME"
       echo "======================================================"
-      echo "=== QR-КОД ДЛЯ СМАРТФОНА" ============================"
+      echo "=== QR-КОД ДЛЯ СМАРТФОНА ====================+========"
       qrencode -t ansiutf8 < "$CDIR/$USERNAME.conf"
       echo "======================================================"
 
@@ -120,7 +120,7 @@ write_files:
     owner: root:root
     permissions: '0755'
     content: |
-      #/bin/bash
+      #!/bin/bash
       set -e
 
       if [ -z "$1" ]; then
@@ -138,20 +138,20 @@ write_files:
       fi
 
       PUB_KEY=$(grep -A 2 "# Name = $USERNAME" /etc/wireguard/wg0.conf | grep "PublicKey" | awk '{print $3}' || true)
-      LINE_NUMBER=$(grep -n "# Name = $USERNAME" /etc/wireguard/wg.conf | cut -d: -f1)
+      LINE_NUMBER=$(grep -n "# Name = $USERNAME" /etc/wireguard/wg0.conf | cut -d: -f1)
       
-      if [ -z "$PUB_KEY" ] && [ -z "$LINE_NUMBER"]; then
+      if [ -z "$PUB_KEY" ] && [ -z "$LINE_NUMBER" ]; then
           echo "Ошибка: Не удалось найти публичный ключ для пользователя $USERNAME!"
           exit 1
       fi
 
-      wg set peer "$PUB_KEY" remove
-      sed -i "$((LINE_NUMBER-1)),$((LINE_NUMBER-3))d" /etc/wireguard/wg0.conf
-      rm -rf "CDIR"
+      wg set wg0 peer "$PUB_KEY" remove
+      sed -i "$((LINE_NUMBER-1)),$((LINE_NUMBER+3))d" /etc/wireguard/wg0.conf
+      rm -rf "$CDIR"
 
       echo "======================================================"
-      echo "Пользователь $USERNAME" успешно удален!"
-      echo "Конфиг удален в: $CDIR/USERNAME"
+      echo "Пользователь $USERNAME успешно удален!"
+      echo "Конфиг удален в: $CDIR/$USERNAME"
       echo "======================================================"
 
 runcmd:
