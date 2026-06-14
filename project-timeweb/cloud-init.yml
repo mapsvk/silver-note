@@ -98,7 +98,7 @@ write_files:
       PersistentKeepalive = 20
       EOF
 
-      wg set wg0 peer "PUB_KEY" allowed-ips "CLIENT_IP/32"
+      wg set wg0 peer "$PUB_KEY" allowed-ips "$CLIENT_IP/32"
 
       cat <<EOF >> /etc/wireguard/wg0.conf
 
