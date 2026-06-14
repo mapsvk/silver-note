@@ -103,7 +103,7 @@ write_files:
       cat <<EOF >> /etc/wireguard/wg0.conf
 
       [Peer]
-      # Name = "$USERNAME"
+      # Name = $USERNAME
       PublicKey = $PUB_KEY
       AllowedIPs = $CLIENT_IP/32
       EOF
