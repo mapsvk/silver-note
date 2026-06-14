@@ -186,3 +186,4 @@ runcmd:
   - ufw allow 22/tcp comment 'SSH Port'
   - ufw allow 51820/udp comment 'WireGuard VPN Port'
   - ufw --force enable
+
