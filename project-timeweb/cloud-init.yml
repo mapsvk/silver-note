@@ -72,19 +72,16 @@ write_files:
       SERVER_PUB_KEY=$(cat /etc/wireguard/server_publickey)
       SERVER_IP=$(curl -s4 ifconfig.me)
 
-
-----------
-
-      USED_IPS=$(grep -oE "10\.8\.0\.[0-9]+" /etc/wireguard/wg0.conf || true)
+      USED_IPS=$(grep -oE "10\.20\.0\.[0-9]+" /etc/wireguard/wg0.conf || true)
       for i in {2..254}; do
-          if ! echo "$USED_IPS" | grep -q "10.8.0.$i"; then
-              CLIENT_IP="10.8.0.$i"
+          if ! echo "$USED_IPS" | grep -q "10.20.0.$i"; then
+              CLIENT_IP="10.20.0.$i"
               break
           fi
       done
 
       if [ -z "$CLIENT_IP" ]; then
-          echo "Ошибка: В подсети закончились свободные IP!"
+          echo "Ошибка: В подсети закончились свободные IP адреса!"
           exit 1
       fi
 
@@ -92,7 +89,7 @@ write_files:
       [Interface]
       PrivateKey = $PRIV_KEY
       Address = $CLIENT_IP/32
-      DNS = 1.1.1.1
+      DNS = 8.8.8.8
 
       [Peer]
       PublicKey = $SERVER_PUB_KEY
@@ -101,8 +98,8 @@ write_files:
       PersistentKeepalive = 20
       EOF
 
-      wg set wg0 peer "$PUB_KEY" allowed-ips "$CLIENT_IP/32"
-      
+      wg set wg0 peer "PUB_KEY" allowed-ips "CLIENT_IP/32"
+
       cat <<EOF >> /etc/wireguard/wg0.conf
 
       [Peer]
@@ -112,30 +109,32 @@ write_files:
       EOF
 
       echo "======================================================"
-      echo "Пользователь $USERNAME успешно добавлен!"
-      echo "Конфиг сохранен в: $CDIR/$USERNAME.conf"
+      echo "Пользователь $USERNAME" успешно добавлен!"
+      echo "Конфиг сохранен в: $CDIR/USERNAME"
       echo "======================================================"
-      echo "=== QR-КОД ДЛЯ СМАРТФОНА (Сканировать в приложении) ==="
+      echo "=== QR-КОД ДЛЯ СМАРТФОНА" ============================"
       qrencode -t ansiutf8 < "$CDIR/$USERNAME.conf"
       echo "======================================================"
 
-# 4. Последовательный запуск служб и сетевого экрана
 runcmd:
-  # Применяем настройки ядра Linux
   - sysctl --system
 
-  # Инициализируем WireGuard сервер, генерируем его ключи и стартовый wg0.conf
+  # WireGuard: Генерируем ключи и конфигурационный файл wg0.conf
   - cd /etc/wireguard/
   - wg genkey | tee server_privatekey | wg pubkey > server_publickey
   - |
     cat <<EOF > wg0.conf
     [Interface]
-    Address = 10.8.0.1/24
+    Address = 10.20.0.1/24
     ListenPort = 51820
     PrivateKey = $(cat server_privatekey)
-    PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-    PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+    # 1. Разрешаем форвардинг из VPN наружу в интернет (через eth0)
+    # 2. БЛОКИРУЕМ трафик из wg0 обратно в wg0 (клиент-клиент)
+    PostUp = iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT; iptables -A FORWARD -i wg0 -o wg0 -j REJECT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+    PostDown = iptables -D FORWARD -i wg0 -o eth0 -j ACCEPT; iptables -D FORWARD -i wg0 -o wg0 -j REJECT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
     EOF
+
+  # Включаем и запускаем WireGuard
   - systemctl enable wg-quick@wg0
   - systemctl start wg-quick@wg0
 
@@ -149,8 +148,3 @@ runcmd:
   - ufw allow 22/tcp comment 'SSH Port'
   - ufw allow 51820/udp comment 'WireGuard VPN Port'
   - ufw --force enable
-
-
-
-
-
