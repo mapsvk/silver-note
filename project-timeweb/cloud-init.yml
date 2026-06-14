@@ -217,7 +217,3 @@ runcmd:
   ## Включение автозапуска и запуск службы Docker
   - systemctl enable docker
   - systemctl start docker
-  
-  ## Настройка прав (опционально): добавление стандартного пользователя в группу docker
-  ## Замените 'ubuntu', если ваш провайдер использует другое имя пользователя по умолчанию (например, 'debian' или 'root')
-  - usermod -aG docker ubuntu
