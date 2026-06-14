@@ -68,7 +68,7 @@ write_files:
       mkdir -p "$CDIR"
 
       PRIV_KEY=$(wg genkey)
-      PUB_KEY=$(echo "PRIV_KEY" | wg pubkey)
+      PUB_KEY=$(echo "$PRIV_KEY" | wg pubkey)
       SERVER_PUB_KEY=$(cat /etc/wireguard/server_publickey)
       SERVER_IP=$(curl -s4 ifconfig.me)
 
