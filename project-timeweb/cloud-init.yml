@@ -3,7 +3,7 @@
 users:
   - name: ubuntu
     shell: /bin/bash
-    groups: sudo
+    groups: sudo, docker
     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL7CvuNInbvoucGdJKhgvXS/vbM5PGt3SqhDo00gSOjK uname@desktop-2
