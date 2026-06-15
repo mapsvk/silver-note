@@ -27,7 +27,7 @@ sudo ufw allow 443/tcp
 
 ```bash
 environment:
-  - SECRET=7ce4c6173cd234ee143cf04793f47c52
+  - SECRET=ee00112233445566778899aabbccddeeff
   - TLS_DOMAIN=google.com
   - TAG=скопированный_тег_от_бота
 ```
