@@ -188,6 +188,8 @@ runcmd:
   - ufw allow 22/tcp comment 'SSH Port'
   - ufw allow 51820/udp comment 'WireGuard VPN Port'
   - ufw limit 1080/tcp comment 'SOCKS5 Port with Rate Limit'
+  - ufw route allow in on br-+ out on eth0 comment 'Allow Docker to Internet'
+
   - ufw --force enable
 
   # Устновка Docker
@@ -228,7 +230,3 @@ runcmd:
 
   ## Запускаем контейнер
   - cd /opt/3proxy && docker compose up -d
-
-  ## Изоляция SOCKS5 и WireGuard между собой
-  - iptables -I FORWARD -i wg0 -o br-+ -j REJECT
-  - iptables -I FORWARD -i br-+ -o wg0 -j REJECT
