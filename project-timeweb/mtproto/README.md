@@ -33,3 +33,49 @@ environment:
 ```
 
 - Перезапустите контейнер: docker compose up -d. Канал появится у пользователей в течение часа.
+
+
+## Множество пользователей
+
+Тут есть несолько вариантов для реализации
+
+- добавлять/удалять ключ из переменной окружения и пересоздавать контейнер
+
+```bash
+environment:
+  - SECRET=ee00112233445566778899aabbccddeeff,НОВЫЙ_HEX_КЛЮЧ
+```
+
+docker compose up -d --force-recreate
+
+
+либо
+
+```bash
+environment:
+      - SECRET=${SECRETS}
+```
+
+создать .env файл с ключами
+
+MTPROXY_SECRETS=ee00112233445566778899aabbccddeeff,ключ_2,ключ_3
+
+docker compose up -d
+
+
+либо
+
+MTPROXY_SECRETS="ключ1,ключ2,ключ3" docker compose up -d
+
+подхватит ключи без изменения докер композе файла
+
+
+## Получить список ключей
+
+```bash
+docker compose logs | grep -E "Secret [0-9]+:"
+```
+
+>mtproto-proxy  | [*]   Secret 1: ee00112233445566778899aabbccddeeff
+
+
