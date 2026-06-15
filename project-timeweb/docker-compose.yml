@@ -1,6 +1,6 @@
 services:
   socks5:
-    image: ghcr.io/tarampampam/3proxy:2
+    image: ghcr.io/tarampampam/3proxy:latest
     container_name: socks5
     ports:
       - "1080:1080"
