@@ -1,12 +1,12 @@
 services:
   socks5:
-    image: ghcr.io/tarampampam/3proxy:2
+    image: ghcr.io/tarampampam/3proxy:latest
     container_name: socks5
     ports:
       - "1080:1080"
     volumes:
       - /opt/3proxy/config:/etc/3proxy:ro
-      - /opt/3proxy/logs:/var/log/3proxy
+      - /opt/3proxy/logs:/var/log/3proxy:rw
     networks:
       - socks5_network
     ulimits:
