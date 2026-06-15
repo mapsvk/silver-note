@@ -1,0 +1,9 @@
+services:
+  dante:
+    image: vimagick/dante
+    container_name: dante-socks5
+    volumes:
+      - ./danted.conf:/etc/danted.conf:ro
+    ports:
+      - "1080:1080"
+    restart: unless-stopped

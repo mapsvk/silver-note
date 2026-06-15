@@ -187,7 +187,6 @@ runcmd:
   - ufw default allow outgoing
   - ufw allow 22/tcp comment 'SSH Port'
   - ufw allow 51820/udp comment 'WireGuard VPN Port'
-  - ufw allow 1080/tcp comment 'SOCKS5 Port'
 
   - ufw --force enable
 
@@ -219,13 +218,3 @@ runcmd:
   ## Включение автозапуска и запуск службы Docker
   - systemctl enable docker
   - systemctl start docker
-
-  # Разворачивание SOCKS5
-  ## Создаем каталоги и скачиваем файлы конфигурации 
-  - mkdir -p /opt/3proxy/config
-
-  - curl -sSL https://raw.githubusercontent.com/mapsvk/silver-note/refs/heads/main/project-timeweb/docker-compose.yml -o /opt/3proxy/docker-compose.yml
-  - curl -sSL https://raw.githubusercontent.com/mapsvk/silver-note/refs/heads/main/project-timeweb/socks5/3proxy.cfg -o /opt/3proxy/config/3proxy.cfg
-
-  ## Запускаем контейнер
-  - cd /opt/3proxy && docker compose up -d
