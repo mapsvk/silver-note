@@ -12,3 +12,8 @@ P.S.
 Возожно это не корпоративные цвета и это совсем другая цветовая схема (поразмышлять.)
 
 ---
+
+  ufw route limit socks5 1080/tcp comment 'SOCKS5 Proxy with Limit'
+  
+  ufw reload
+
