@@ -7,7 +7,6 @@ services:
       - "1080:1080/tcp"
     volumes:
       - /opt/3proxy/config:/etc/3proxy:ro
-      - /opt/3proxy/logs:/var/log/3proxy
     networks:
       - socks5_network
     ulimits:
