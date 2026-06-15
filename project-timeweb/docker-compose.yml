@@ -2,17 +2,29 @@ services:
   socks5:
     image: ghcr.io/tarampampam/3proxy:2
     container_name: socks5
-    restart: always
     ports:
-      - "1080:1080/tcp"
+      - "1080:1080"
     volumes:
       - /opt/3proxy/config:/etc/3proxy:ro
+      - /opt/3proxy/logs:/var/log/3proxy
     networks:
       - socks5_network
     ulimits:
       nofile:
-        soft: 20000
-        hard: 20000
+        soft: 65536
+        hard: 65536
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 1080 || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_preiod: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
 
 networks:
   socks5_network:

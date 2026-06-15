@@ -16,4 +16,32 @@ P.S.
   ufw route limit socks5 1080/tcp comment 'SOCKS5 Proxy with Limit'
   
   ufw reload
+---
 
+---
+ services:
+   3proxy:
+     image: 3proxy/3proxy:latest
+     container_name: 3proxy
+     volumes:
+       - /opt/3proxy/conf:/usr/local/3proxy/conf:ro
+       - /opt/3proxy/logs:/usr/local/3proxy/logs
+     ports:
+       - "58172:58172"
+       - "3129:3129"
+     ulimits:
+       nofile:
+         soft: 65536
+         hard: 65536
+     healthcheck:
+       test: ["CMD-SHELL", "nc -z 127.0.0.1 58172 || exit 1"]
+       interval: 15s
+       timeout: 3s
+       retries: 5
+       start_period: 5s
+     logging:
+       driver: json-file
+       options:
+         max-size: "10m"
+         max-file: "3"
+     restart: unless-stopped

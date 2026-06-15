@@ -187,8 +187,7 @@ runcmd:
   - ufw default allow outgoing
   - ufw allow 22/tcp comment 'SSH Port'
   - ufw allow 51820/udp comment 'WireGuard VPN Port'
-  - ufw limit 1080/tcp comment 'SOCKS5 Port with Rate Limit'
-  - ufw route allow in on br-+ out on eth0 comment 'Allow Docker to Internet'
+  - ufw allow 1080/tcp comment 'SOCKS5 Port'
 
   - ufw --force enable
 
@@ -224,6 +223,8 @@ runcmd:
   # Разворачивание SOCKS5
   ## Создаем каталоги и скачиваем файлы конфигурации 
   - mkdir -p /opt/3proxy/config
+  - mkdir -p /opt/3proxy/logs
+  - chmod -R 775 /opt/3proxy/logs
 
   - curl -sSL https://raw.githubusercontent.com/mapsvk/silver-note/refs/heads/main/project-timeweb/docker-compose.yml -o /opt/3proxy/docker-compose.yml
   - curl -sSL https://raw.githubusercontent.com/mapsvk/silver-note/refs/heads/main/project-timeweb/socks5/3proxy.cfg -o /opt/3proxy/config/3proxy.cfg
