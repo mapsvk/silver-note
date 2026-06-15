@@ -1,0 +1,14 @@
+services:
+  mtproto:
+    image: telegrammessenger/proxy:latest
+    container_name: mtproto-proxy
+    restart: always
+    ports:
+      - "443:443"
+    environment:
+      # Замените секрет на свой (32 символа в hex + префикс ee)
+      - SECRET=ee00112233445566778899aabbccddeeff
+      # Домен для маскировки трафика (под Fake TLS)
+      - TLS_DOMAIN=google.com
+      # (Опционально) Ваш тег от @MTProxybot для промо-канала
+      # - TAG=ваш_тег_от_бота
