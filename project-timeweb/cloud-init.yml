@@ -190,9 +190,6 @@ runcmd:
   - ufw limit 1080/tcp comment 'SOCKS5 Port with Rate Limit'
   - ufw --force enable
 
-  - iptables -I FORWARD -i wg0 -o br-+ -j REJECT
-  - iptables -I FORWARD -i br-+ -o wg0 -j REJECT
-
   # Устновка Docker
   ## Создание директории для GPG-ключа
   - install -m 0755 -d /etc/apt/keyrings
@@ -233,6 +230,10 @@ runcmd:
   ## подумать над правами доступа (запускать контейнер от root не спешу)
   - chown -R 10001:10001 /opt/3proxy/logs
   - chmod -R 700 /opt/3proxy/logs
+
+  ## Изоляция SOCKS5 и WireGuard между собой
+  - iptables -I FORWARD -i wg0 -o br-+ -j REJECT
+  - iptables -I FORWARD -i br-+ -o wg0 -j REJECT
 
   ## Запускаем контейнер
   - cd /opt/3proxy && docker compose up -d
