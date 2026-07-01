@@ -4,7 +4,7 @@
   apt:
     name: "{{ wg_required_packages }}"
     state: present
-    udpate_cache: true
+    update_cache: true
 
 - name: Install WireGuard
   apt:
