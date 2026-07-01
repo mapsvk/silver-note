@@ -10,3 +10,11 @@
   apt:
     name: wireguard
     state: present
+
+- name: Enable IPv4 forwarding in kernel
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+    state: present
+    reload: true

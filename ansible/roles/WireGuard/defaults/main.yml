@@ -2,3 +2,12 @@
 # defaults file for roles/srv01
 wg_required_packages:
   - qrencode
+
+wg_interface: "wg0"
+wg_ListenPort: 51820
+wg_Address: "10.20.0.1/24"
+
+# The path for storing keys on the server
+wg_config_dir: "/etc/wireguard"
+
+
