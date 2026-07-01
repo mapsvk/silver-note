@@ -4,5 +4,5 @@
   connection: local
   become: true
 
-  tasks:
-    # 1. 
+  roles:
+    - role: srv01
