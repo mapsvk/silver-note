@@ -20,6 +20,8 @@
     reload: true
 
 - name: Generate the private key of the server
-  command: wq genkey
+  command: wg genkey
   register: wg_private_key_output
   changed_when: false
+
+
