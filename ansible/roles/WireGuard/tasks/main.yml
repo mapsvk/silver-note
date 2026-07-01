@@ -1,0 +1,12 @@
+---
+# tasks file for roles/srv01
+- name: Install prerequisites for WireGuard
+  apt:
+    name: "{{ wg_required_packages }}"
+    state: present
+    udpate_cache: true
+
+- name: Install WireGuard
+  apt:
+    name: wireguard
+    state: present

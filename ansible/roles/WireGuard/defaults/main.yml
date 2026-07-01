@@ -1,2 +1,4 @@
 ---
 # defaults file for roles/srv01
+wg_required_packages:
+  - qrencode

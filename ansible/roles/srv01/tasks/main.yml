@@ -1,6 +1,0 @@
----
-# tasks file for roles/srv01
-- name: Install WireGuard
-  apt:
-    name: wireguard
-    state: present
