@@ -36,7 +36,7 @@
     owner: root
     group: root
     mode: '0600'
-    when: not wg_private_key_file.exists
+  when: not wg_private_key_file.stat.exists
 
 - name: Generate WireGuard configuration file
   template:
