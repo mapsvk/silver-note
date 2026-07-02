@@ -1,7 +1,7 @@
 [Interface]
 Address = {{ wg_Address }}
 ListenPort = {{ wg_ListenPort }}
-PrivateKey = {{ wg_private_key_output.stdout }}
+PrivateKey = {{ wg_private_key_output }}
 
 # 1. Разрешаем форвардинг из VPN наружу в интернет (через eth0)
 # 2. БЛОКИРУЕМ трафик из wg0 обратно в wg0 (клиент-клиент)

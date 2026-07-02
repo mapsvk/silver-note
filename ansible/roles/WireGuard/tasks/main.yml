@@ -26,12 +26,17 @@
 
 - name: Generate server private key if exists
   command: wg genkey
-  register: wg_private_key_output
+  register: wg_private_key_output_raw
+  when: not wg_private_key_file.stat.exists
+
+- name: Get private key form output_raw
+  set_fact:
+    wg_private_key_output: "{{ wg_private_key_output_raw.stdout }}"
   when: not wg_private_key_file.stat.exists
 
 - name: Save generated private key to file
   copy:
-    content: "{{ wg_private_key_output.stdout }}"
+    content: "{{ wg_private_key_output }}"
     dest: "{{ wg_config_dir }}/private.key"
     owner: root
     group: root
@@ -44,14 +49,10 @@
   register: wg_private_key_base64
   when: wg_private_key_file.stat.exists
 
-- name: Save content to a variable
+- name: Save key to the variable
   set_fact:
     wg_private_key_output: "{{ wg_private_key_base64['content'] | b64decode | trim }}"
   when: wg_private_key_file.stat.exists
-
-- name: Show wg_private_key_base64
-  debug:
-    var: wg_private_key_base64
 
 - name: Generate WireGuard configuration file
   template:
