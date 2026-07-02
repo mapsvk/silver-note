@@ -49,6 +49,10 @@
     wg_private_key_output: "{{ wg_private_key_base64['content'] | b64decode | trim }}"
   when: wg_private_key_file.stat.exists
 
+- name: Show wg_private_key_base64
+  debug:
+    var: wg_private_key_base64
+
 - name: Generate WireGuard configuration file
   template:
     src: wg0.conf.j2
