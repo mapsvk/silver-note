@@ -2,5 +2,5 @@
 # handlers file for roles/srv01
 - name: Restart WireGuard
   service:
-    name: "wg-quick@{{ wg_interface s}}"
+    name: "wg-quick@{{ wg_interface }}"
     state: restarted
