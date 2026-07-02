@@ -45,7 +45,8 @@
   wnen: wg_private_key_file.stat.exists
 
 - name: Save content to a variable
-  wg_private_key_output: "{{ wg_private_key_base64['content'] | b64decode | trim }}"
+  set_fact:
+    wg_private_key_output: "{{ wg_private_key_base64['content'] | b64decode | trim }}"
   when: wg_private_key_file.stat.exists
 
 - name: Generate WireGuard configuration file
