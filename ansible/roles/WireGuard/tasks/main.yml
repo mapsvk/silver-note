@@ -34,4 +34,3 @@
     owner: root
     group: root
     mode: '0600'
-  notify: qwe
