@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+if [ -z "$1" ]; then
+    echo "Ошибка: Укажите имя пользователя для удаления!"
+    echo "Использование: del-wg-user"
+    exit 1
+fi
+
+USERNAME=$1
+CDIR="/etc/wireguard/clients/$USERNAME"
+
+if [ ! -d "$CDIR" ]; then
+    echo "Ошибка: Пользователь $USERNAME на найден!"
+    exit 1
+fi
+
+PUB_KEY=$(grep -A 2 "# Name = $USERNAME" /etc/wireguard/wg0.conf | grep "PublicKey" | awk '{print $3}' || true)
+LINE_NUMBER=$(grep -n "# Name = $USERNAME" /etc/wireguard/wg0.conf | cut -d: -f1)
+
+if [ -z "$PUB_KEY" ] && [ -z "$LINE_NUMBER" ]; then
+    echo "Ошибка: Не удалось найти публичный ключ для пользователя $USERNAME!"
+    exit 1
+fi
+
+wg set wg0 peer "$PUB_KEY" remove
+sed -i "$((LINE_NUMBER-1)),$((LINE_NUMBER+3))d" /etc/wireguard/wg0.conf
+rm -rf "$CDIR"
+
+echo "======================================================"
+echo "Пользователь $USERNAME успешно удален!"
+echo "Конфиг удален в: $CDIR/"
+echo "======================================================"
