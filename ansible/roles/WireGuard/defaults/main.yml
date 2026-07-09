@@ -10,8 +10,4 @@ wg_Address: "10.20.0.1/24"
 ## The path for storing keys on the server
 wg_config_dir: "/etc/wireguard"
 
-## defaults file for wg_manager
-wg_manager_config_dir: "/etc/wireguard"
-wg_manager_dns: "8.8.8.8"
-wg_manager_port: 51820
-wg_manager_interaface: "wg0"
+wg_dns: "8.8.8.8"

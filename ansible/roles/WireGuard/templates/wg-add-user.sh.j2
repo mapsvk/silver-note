@@ -8,7 +8,7 @@ if [ -z "$1" ]; then
 fi
 
 USERNAME=$1
-CDIR="{{ wg_manager_config_dir }}/clients/$USERNAME"
+CDIR="{{ wg_config_dir }}/clients/$USERNAME"
 
 if [ -d "$CDIR" ]; then
     echo "Ошибка: Пользователь $USERNAME уже существует!"
@@ -19,10 +19,10 @@ mkdir -p "$CDIR"
 
 PRIV_KEY=$(wg genkey)
 PUB_KEY=$(echo "$PRIV_KEY" | wg pubkey)
-SERVER_PUB_KEY=$(cat /etc/wireguard/server_publickey)
+SERVER_PUB_KEY=$(cat {{ wg_config_dir }}/server_publickey)
 SERVER_IP=$(curl -s4 ifconfig.me)
 
-USED_IPS=$(grep -oE "10\.20\.0\.[0-9]+" /etc/wireguard/wg0.conf || true)
+USED_IPS=$(grep -oE "10\.20\.0\.[0-9]+" /etc/wireguard/{{ wg_interface }}.conf || true)
 for i in {2..254}; do
     if ! echo "$USED_IPS" | grep -q "10.20.0.$i"; then
     CLIENT_IP="10.20.0.$i"
@@ -39,18 +39,18 @@ cat <<EOF > "$CDIR/$USERNAME.conf"
 [Interface]
 PrivateKey = $PRIV_KEY
 Address = $CLIENT_IP/32
-DNS = 8.8.8.8
+DNS = {{ wg_dns }}
 
 [Peer]
 PublicKey = $SERVER_PUB_KEY
-Endpoint = $SERVER_IP:51820
+Endpoint = $SERVER_IP:{{ wg_ListenPort }}
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 20
 EOF
 
 wg set wg0 peer "$PUB_KEY" allowed-ips "$CLIENT_IP/32"
 
-cat <<EOF >> /etc/wireguard/wg0.conf
+cat <<EOF >> {{ wg_config_dir }}/{{ wg_interface }}.conf
 
 [Peer]
 # Name = $USERNAME
