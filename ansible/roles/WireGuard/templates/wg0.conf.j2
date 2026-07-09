@@ -3,17 +3,8 @@ Address = {{ wg_Address }}
 ListenPort = {{ wg_ListenPort }}
 PrivateKey = {{ wg_private_key_output }}
 
-# 1. Разрешаем форвардинг из VPN наружу в интернет (через eth0)
-# 2. БЛОКИРУЕМ трафик из wg0 обратно в wg0 (клиент-клиент)
-
-# доработать! {{ wg_interface }}
-#PostUp = iptables -A FORWARD -i wg0 -o eth0 -j ACCEPT; iptables -A FORWARD -i wg0 -o wg0 -j REJECT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-#PostDown = iptables -D FORWARD -i wg0 -o eth0 -j ACCEPT; iptables -D FORWARD -i wg0 -o wg0 -j REJECT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-#PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-#PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-# Динамическое определение интерфейса через Ansible Facts
-#PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o {{ ansible_facts['default_ipv4']['interface'] }} -j MASQUERADE
-#PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o {{ ansible_facts['default_ipv4']['interface'] }} -j MASQUERADE
+PostUp = iptables -A FORWARD -i %i -o {{ ansible_default_ipv4.interface }} -j ACCEPT; iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT; iptables -A FORWARD -i %i -o %i -j REJECT --reject-with icmp-port-unreachable; iptables -t nat -A POSTROUTING -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -o {{ ansible_default_ipv4.interface }} -j ACCEPT; iptables -D FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT; iptables -D FORWARD -i %i -o %i -j REJECT --reject-with icmp-port-unreachable; iptables -t nat -D POSTROUTING -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
 
 # Peers
 
