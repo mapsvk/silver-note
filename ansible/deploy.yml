@@ -6,4 +6,4 @@
 
   roles:
     - role: WireGuard
-    - rote: wg_manager
+    - role: wg_manager
