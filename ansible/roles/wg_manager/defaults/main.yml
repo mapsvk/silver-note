@@ -1,6 +1,0 @@
----
-# defaults file for wg_manager
-wg_manager_config_dir: "/etc/wireguard"
-wg_manager_dns: "8.8.8.8"
-wg_manager_port: 51820
-wg_manager_interaface: "wg0"

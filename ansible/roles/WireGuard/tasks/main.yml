@@ -62,3 +62,20 @@
     group: root
     mode: '0600'
   notify: Restart WireGuard
+
+## tasks for wg_manager
+- name: Copy WireGuard user creation script from template
+  template:
+    src: wg-add-user.sh.j2
+    dest: /usr/local/bin/wg-add-user
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: Copy WireGuard user deletion script from template
+  template:
+    src: wg-del-user.sh.j2
+    dest: /usr/local/bin/wg-del-user
+    owner: root
+    group: root
+    mode: '0750'
