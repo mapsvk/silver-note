@@ -2,6 +2,7 @@
 # defaults file for roles/srv01
 wg_required_packages:
   - qrencode
+  - iptables
 
 wg_interface: "wg0"
 wg_ListenPort: 51820
