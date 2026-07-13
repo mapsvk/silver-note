@@ -5,8 +5,8 @@ wireguard_required_packages:
   - iptables
 
 wireguard_interface: "wg0"
-wireguard_ListenPort: 51820
-wireguard_Address: "10.20.0.1/24"
+wireguard_listenPort: 51820
+wireguard_address: "10.20.0.1/24"
 
 ## The path for storing keys on the server
 wireguard_config_dir: "/etc/wireguard"

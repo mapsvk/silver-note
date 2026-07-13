@@ -43,7 +43,7 @@ DNS = {{ wireguard_dns }}
 
 [Peer]
 PublicKey = $SERVER_PUB_KEY
-Endpoint = $SERVER_IP:{{ wireguard_ListenPort }}
+Endpoint = $SERVER_IP:{{ wireguard_listenPort }}
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 20
 EOF
