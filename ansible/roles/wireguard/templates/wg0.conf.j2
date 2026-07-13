@@ -1,6 +1,6 @@
 [Interface]
 Address = {{ wireguard_address }}
-ListenPort = {{ wireguard_listenPort }}
+ListenPort = {{ wireguard_listenport }}
 PrivateKey = {{ wireguard_private_key_output }}
 
 PostUp = iptables -A FORWARD -i %i -o {{ ansible_facts['default_ipv4']['interface'] }} -j ACCEPT; iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT; iptables -A FORWARD -i %i -o %i -j REJECT; iptables -t nat -A POSTROUTING -o {{ ansible_facts['default_ipv4']['interface'] }} -j MASQUERADE
