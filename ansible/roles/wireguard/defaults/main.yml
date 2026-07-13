@@ -1,14 +1,14 @@
 ---
 # defaults file for roles/srv01
-wg_required_packages:
+wireguard_required_packages:
   - qrencode
   - iptables
 
-wg_interface: "wg0"
-wg_ListenPort: 51820
-wg_Address: "10.20.0.1/24"
+wireguard_interface: "wg0"
+wireguard_ListenPort: 51820
+wireguard_Address: "10.20.0.1/24"
 
 ## The path for storing keys on the server
-wg_config_dir: "/etc/wireguard"
+wireguard_config_dir: "/etc/wireguard"
 
-wg_dns: "8.8.8.8"
+wireguard_dns: "8.8.8.8"
