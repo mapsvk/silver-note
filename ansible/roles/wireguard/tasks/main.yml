@@ -28,6 +28,7 @@
   ansible.builtin.command: wg genkey
   register: wireguard_private_key_output_raw
   when: not wireguard_private_key_file.stat.exists
+  changed_when: false # переписать
 
 - name: Get private key form output_raw
   ansible.builtin.set_fact:
