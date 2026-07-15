@@ -34,9 +34,9 @@
     mode: '0600'
   when: wireguard_private_key_output_raw.changed
 
-- name: Tasks for wireguard_manager
+- name: "WireGuard: User management"
   block:
-    - name: Copy WireGuard user creation script from template
+    - name: "WireGuard: Copy user creation script from template"
       ansible.builtin.template:
         src: wg-add-user.sh.j2
         dest: /usr/local/bin/wg-add-user
@@ -44,7 +44,7 @@
         group: root
         mode: '0750'
 
-    - name: Copy WireGuard user deletion script from template
+    - name: "WireGuard: Copy user deletion script from template"
       ansible.builtin.template:
         src: wg-del-user.sh.j2
         dest: /usr/local/bin/wg-del-user
