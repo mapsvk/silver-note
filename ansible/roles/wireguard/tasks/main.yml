@@ -32,7 +32,7 @@
     owner: root
     group: root
     mode: '0600'
-  when: wireguard_private_key_output_raw.changed
+    when: wireguard_private_key_output_raw.changed
 
 ## tasks for wireguard_manager
 - name: Copy WireGuard user creation script from template
