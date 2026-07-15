@@ -1,4 +1,4 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 galaxy_info:
   author: "mapsvk"
   description: "WireGuard VPN role"
@@ -15,8 +15,7 @@ galaxy_info:
   # - GPL-3.0-only
   # - Apache-2.0
   # - CC-BY-4.0
-  license:
-    - "MIT"
+  license: "MIT"
 
   min_ansible_version: 2.16
 
