@@ -20,8 +20,8 @@ galaxy_info:
   min_ansible_version: 2.16
 
   galaxy_tags:
-  - vpn
-  - wireguard
+    - vpn
+    - wireguard
 
 dependencies: []
   # List your role dependencies here, one per line. Be sure to remove the '[]' above,
