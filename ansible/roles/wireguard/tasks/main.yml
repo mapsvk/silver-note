@@ -25,7 +25,7 @@
   args:
     creates: "{{ wireguard_config_dir }}/private.key"
 
-- name: Save generated private key to file # noqa: no-handler 
+- name: Save generated private key to file # noqa: no-handler
   ansible.builtin.copy:
     content: "{{ wireguard_private_key_output_raw.stdout }}"
     dest: "{{ wireguard_config_dir }}/private.key"
