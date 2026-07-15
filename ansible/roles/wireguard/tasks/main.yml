@@ -1,42 +1,44 @@
 ---
 # tasks file for roles/srv01
-- name: Install prerequisites for WireGuard
-  ansible.builtin.apt:
-    name: "{{ wireguard_required_packages }}"
-    state: present
-    update_cache: true
-
-- name: Install WireGuard
-  ansible.builtin.apt:
-    name: wireguard
-    state: present
-
-- name: Enable IPv4 forwarding in kernel
-  ansible.posix.sysctl:
-    name: net.ipv4.ip_forward
-    value: '1'
-    sysctl_set: true
-    state: present
-    reload: true
-
-- name: Generate WireGuard private key
-  ansible.builtin.command: wg genkey
-  register: wireguard_private_key_output_raw
-  args:
-    creates: "{{ wireguard_config_dir }}/private.key"
-
-- name: Save generated private key to file # noqa: no-handler
-  ansible.builtin.copy:
-    content: "{{ wireguard_private_key_output_raw.stdout }}"
-    dest: "{{ wireguard_config_dir }}/private.key"
-    owner: root
-    group: root
-    mode: '0600'
-  when: wireguard_private_key_output_raw.changed
-
-- name: "WireGuard: User management"
+- name: Install and configure server
   block:
-    - name: "WireGuard: Copy user creation script from template"
+    - name: Install prerequisites for WireGuard
+      ansible.builtin.apt:
+        name: "{{ wireguard_required_packages }}"
+        state: present
+        update_cache: true
+
+    - name: Install WireGuard
+      ansible.builtin.apt:
+        name: wireguard
+        state: present
+
+    - name: Enable IPv4 forwarding in kernel
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_set: true
+        state: present
+        reload: true
+
+    - name: Generate WireGuard private key
+      ansible.builtin.command: wg genkey
+      register: wireguard_private_key_output_raw
+      args:
+        creates: "{{ wireguard_config_dir }}/private.key"
+
+    - name: Save generated private key to file # noqa: no-handler
+      ansible.builtin.copy:
+        content: "{{ wireguard_private_key_output_raw.stdout }}"
+        dest: "{{ wireguard_config_dir }}/private.key"
+        owner: root
+        group: root
+        mode: '0600'
+      when: wireguard_private_key_output_raw.changed
+
+- name: User management
+  block:
+    - name: Copy user creation script from template
       ansible.builtin.template:
         src: wg-add-user.sh.j2
         dest: /usr/local/bin/wg-add-user
@@ -44,7 +46,7 @@
         group: root
         mode: '0750'
 
-    - name: "WireGuard: Copy user deletion script from template"
+    - name: Copy user deletion script from template
       ansible.builtin.template:
         src: wg-del-user.sh.j2
         dest: /usr/local/bin/wg-del-user
