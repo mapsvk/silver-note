@@ -36,14 +36,14 @@
         group: root
         mode: '0600'
       when: wireguard_private_key_output_raw.changed
-    
+
     - name: Generate WireGuard public key
       ansible.builtin.command:
         cmd: wg pubkey
         stdin: "{{ wireguard_private_key_output_raw.stdout }}"
       register: wireguard_public_key_output_raw
       when: wireguard_public_key_output_raw.stat.exists
-    
+
     - name: Save generated public key to file
       ansible.builtin.copy:
         content: "{{ wireguard_public_key_output_raw.stdout }}"
